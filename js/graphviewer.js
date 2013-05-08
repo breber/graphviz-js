@@ -127,6 +127,7 @@ function drawGraph() {
     ctx.strokeStyle = INITIAL_COLOR;
     ctx.lineWidth = 1;
 
+    // Draw all normal edges
     for (var i = 0; i < vertices.length; i++) {
         var neighbors = graph.getNeighbors(vertices[i]);
         for (var iter = 0; iter < neighbors.length; iter++) {
@@ -138,7 +139,8 @@ function drawGraph() {
             ctx.closePath();
         }
     }
-
+    
+    // Draw all nodes
     ctx.fillStyle = INITIAL_COLOR;
     for (var i = 2; i < vertices.length; i++) {
         ctx.fillRect(vertices[i].x * CELL_SIZE - NODE_WIDTH / 2,
@@ -146,4 +148,32 @@ function drawGraph() {
                      NODE_WIDTH, NODE_HEIGHT);
     }
 
+    // Start and Goal nodes
+    var x = vertices[0].x * CELL_SIZE;
+    var y = vertices[0].y * CELL_SIZE;
+    ctx.beginPath();
+    ctx.arc(x - NODE_WIDTH, y - NODE_HEIGHT, NODE_WIDTH, 0, 2 * Math.PI);
+    ctx.fillStyle = START_COLOR;
+    ctx.fill();
+    ctx.closePath();
+    ctx.beginPath();
+    ctx.arc(x - NODE_WIDTH, y - NODE_HEIGHT, NODE_WIDTH * 2, 0, 2 * Math.PI);
+    ctx.strokeStyle = START_COLOR;
+    ctx.stroke();
+    ctx.closePath();
+
+    if (goal !== undefined) {
+        x = vertices[1].x * CELL_SIZE;
+        y = vertices[1].y * CELL_SIZE;
+        ctx.beginPath();
+        ctx.arc(x - NODE_WIDTH, y - NODE_HEIGHT, NODE_WIDTH, 0, 2 * Math.PI);
+        ctx.fillStyle = GOAL_COLOR;
+        ctx.fill();
+        ctx.closePath();
+        ctx.beginPath();
+        ctx.arc(x - NODE_WIDTH, y - NODE_HEIGHT, NODE_WIDTH * 2, 0, 2 * Math.PI);
+        ctx.strokeStyle = GOAL_COLOR;
+        ctx.stroke();
+        ctx.closePath();
+    }
 }
