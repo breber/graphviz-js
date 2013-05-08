@@ -14,7 +14,10 @@ var PATH_COLOR = "rgb(0, 0, 255)";
 var LAST_ADDED_COLOR = "rgb(0, 255, 255)";
 
 $().ready(function() {
-	init();
+    init();
+
+    // TODO: remove this
+    generateGraph();
 });
 
 // Default graph attributes
@@ -31,86 +34,116 @@ var graph = new ListGraph();
 var lastAddedToClosedSet;
 
 function init() {
-	// Set up canvas
-	var canvas = document.getElementById('panel');
-	canvas.style.width = MAX_COORDINATE * CELL_SIZE;
-	canvas.style.height = MAX_COORDINATE * CELL_SIZE;
+    // Set up canvas
+    var canvas = document.getElementById('panel');
+    canvas.setAttribute('width', MAX_COORDINATE * CELL_SIZE);
+    canvas.setAttribute('height', MAX_COORDINATE * CELL_SIZE);
 
-	// Generate seed
-	var time = Date.now();
-	sessionStorage["seed"] = time;
+    // Generate seed
+    var time = Date.now();
+    sessionStorage["seed"] = time;
 
-	// TODO: set up click handlers
-	$("#buildGraphOk").click(generateGraph);
+    // TODO: set up click handlers
+    $("#buildGraphOk").click(generateGraph);
 }
 
 function generateGraph() {
-	var seed = 1; //sessionStorage["seed"];
-	Math.seedrandom(seed);
+    var seed = lastSeed;
+    Math.seedrandom(seed);
 
-	var initial = 0;
-	if (start != null) {
-		vertices[initial] = start;
-		initial++;
-	}
-	if (goal != null) {
-		vertices[initial] = goal;
-		initial++;
-	}
+    var initial = 0;
+    if (start != null) {
+        vertices[initial] = start;
+        initial++;
+    }
+    if (goal != null) {
+        vertices[initial] = goal;
+        initial++;
+    }
 
-	// Generate 'size' distinct random points
-	for (var i = initial; i < numberOfPoints; i++) {
-		var collides = false;
-		do {
-			collides = false;
-			var x = Math.floor(Math.random() * MAX_COORDINATE);
-			var y = Math.floor(Math.random() * MAX_COORDINATE);
+    // Generate 'size' distinct random points
+    for (var i = initial; i < numberOfPoints; i++) {
+        var collides = false;
+        do {
+            collides = false;
+            var x = Math.floor(Math.random() * MAX_COORDINATE);
+            var y = Math.floor(Math.random() * MAX_COORDINATE);
 
-			var p = new Point(x, y);
-			for (var j = 0; j < vertices.length; j++) {
-				if (p.equals(vertices[j])) {
-					collides = true;
-					break;
-				}
-			}
-			
-			if (!collides) {
-				vertices.push(p);
-			}
-		} while (collides);
-	}
+            var p = new Point(x, y);
+            for (var j = 0; j < vertices.length; j++) {
+                if (p.equals(vertices[j])) {
+                    collides = true;
+                    break;
+                }
+            }
 
-	var indexMap = {};
-	for (var i = 0; i < numberOfPoints; i++) {
-		graph.addVertex(vertices[i]);
-		indexMap[vertices[i]] = i;
-	}
+            if (!collides) {
+                vertices.push(p);
+            }
+        } while (collides);
+    }
 
-	for (var i = 0; i < numberOfPoints; i++) {
-		for (var j = 0; j < numberOfPoints; j++) {
-			if (i !== j) {
-				var dist = Math.round(Point.distance(vertices[i], vertices[j]) * 100);
-				if (dist < maxEdgeLength * 100) {
-					var flip = Math.random();
-					if (flip * 100 < density) {
-						// Add edges (i, j) and (j, i), if not already present
-						var neighbors = graph.getNeighbors(vertices[i]);
-						var found = false;
-						for (var iter = 0; iter < neighbors.length; iter++) {
-							var p = neighbors[iter].vertex;
-							if (p.equals(vertices[j])) {
-								found = true;
-								break;
-							}
-						}
+    var indexMap = {};
+    for (var i = 0; i < numberOfPoints; i++) {
+        graph.addVertex(vertices[i]);
+        indexMap[vertices[i]] = i;
+    }
 
-						if (!found) {
-							graph.addEdge(vertices[i], vertices[j], dist);
-							graph.addEdge(vertices[j], vertices[i], dist);
-						}
-					}
-				}
-			}
-		}
-	}
+    for (var i = 0; i < numberOfPoints; i++) {
+        for (var j = 0; j < numberOfPoints; j++) {
+            if (i !== j) {
+                var dist = Math.round(Point.distance(vertices[i], vertices[j]) * 100);
+                if (dist < maxEdgeLength * 100) {
+                    var flip = Math.random();
+                    if (flip * 100 < density) {
+                        // Add edges (i, j) and (j, i), if not already present
+                        var neighbors = graph.getNeighbors(vertices[i]);
+                        var found = false;
+                        for (var iter = 0; iter < neighbors.length; iter++) {
+                            var p = neighbors[iter].vertex;
+                            if (p.equals(vertices[j])) {
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        if (!found) {
+                            graph.addEdge(vertices[i], vertices[j], dist);
+                            graph.addEdge(vertices[j], vertices[i], dist);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    drawGraph();
+}
+
+function drawGraph() {
+    var panel = document.getElementById("panel");
+    var ctx = panel.getContext("2d");
+
+    ctx.strokeStyle = INITIAL_COLOR;
+    ctx.lineWidth = 1;
+
+    for (var i = 0; i < vertices.length; i++) {
+        var neighbors = graph.getNeighbors(vertices[i]);
+        for (var iter = 0; iter < neighbors.length; iter++) {
+            var p = neighbors[iter].vertex;
+            ctx.beginPath();
+            ctx.moveTo(vertices[i].x * CELL_SIZE, vertices[i].y * CELL_SIZE);
+            ctx.lineTo(p.x * CELL_SIZE, p.y * CELL_SIZE);
+            ctx.stroke();
+            ctx.closePath();
+        }
+    }
+
+    ctx.fillStyle = INITIAL_COLOR;
+    for (var i = 2; i < vertices.length; i++) {
+        ctx.fillRect(vertices[i].x * CELL_SIZE - NODE_WIDTH / 2,
+                     vertices[i].y * CELL_SIZE - NODE_WIDTH / 2,
+                     NODE_WIDTH, NODE_HEIGHT);
+    }
+
 }
