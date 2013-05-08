@@ -1,0 +1,95 @@
+<html>
+<head>
+	<title>Graph Search Algorithms</title>
+	<link type="text/css" rel="stylesheet" href="http://cdn.brianreber.com/bootstrap-3/css/bootstrap.min.css">
+	<script type="text/javascript" src="http://cdn.brianreber.com/js/jquery.min.js"></script>
+	<script type="text/javascript" src="http://cdn.brianreber.com/bootstrap-3/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="./js/graphviewer.js"></script>
+</head>
+<body>
+	<div class="navbar">
+	  <a class="navbar-brand" href="#">Graph Search</a>
+	  <ul class="nav navbar-nav">
+	    <li><a data-toggle="modal" href="#createGraph">Create Graph</a></li>
+	    <li><a>Step</a></li>
+	    <li><a>Run</a></li>
+	    <li><a>Pause</a></li>
+	    <li><a>Reset</a></li>
+	  </ul>
+		<form class="navbar-form pull-left">
+			<select style="width: 150px;">
+			  <option>BFS</option>
+			  <option>DFS</option>
+			  <option>Dijkstra</option>
+			  <option>A*</option>
+			</select>
+      <label>
+        <input type="checkbox" id="bidirectional"> Bidirectional
+      </label>
+		</form>
+	</div>
+
+	<canvas id="panel"></canvas>
+
+	<div class="modal" id="createGraph">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title">Create Graph</h4>
+	      </div>
+	      <div class="modal-body">
+					<form>
+					  <fieldset>
+							<div class="radio">
+							  <label>
+							    <input type="radio" name="optionsRadios" id="seedRandom" value="random" checked> Random
+							  </label>
+							</div>
+							<div class="radio">
+							  <label>
+							    <input type="radio" name="optionsRadios" id="seedLast" value="last"> Use last seed
+							  </label>
+							</div>
+							<div class="radio">
+							  <label>
+							    <input type="radio" name="optionsRadios" id="seedEnter" value="enter"> Enter seed
+							  </label>
+							</div>
+					    <label>Seed:</label>
+					    <input type="text" id="seedValue" disabled>
+					    <label>Number of points:</label>
+					    <input type="text" id="numPoints" value="1000">
+					    <label>Max edge length:</label>
+					    <input type="text" id="maxEdgeLength" value="5">
+					    <label>Density (0 - 100%):</label>
+					    <input type="text" id="density" value="100">
+							<div>
+						    <label>Start node x:</label>
+						    <input type="text" id="startX" value="33">
+						    <label>Start node y:</label>
+						    <input type="text" id="startY" value="66">
+							</div>
+					    <div class="checkbox">
+					      <label>
+					        <input type="checkbox" id="useGoalNode" checked> Use goal node
+					      </label>
+					    </div>
+							<div>
+						    <label>Goal node x:</label>
+						    <input type="text" id="goalX" value="90">
+						    <label>Goal node y:</label>
+						    <input type="text" id="goalY" value="10">
+							</div>
+					  </fieldset>
+					</form>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+	        <a href="#" id="buildGraphOk" data-dismiss="modal" class="btn btn-primary">OK</a>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</body>
+</html>
