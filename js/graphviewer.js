@@ -32,6 +32,7 @@ var goal = new Point(MAX_COORDINATE - 10, 10);
 var vertices = [];
 var graph = new ListGraph();
 var lastAddedToClosedSet;
+var algorithm;
 
 function init() {
     // Set up canvas
@@ -45,6 +46,17 @@ function init() {
 
     // TODO: set up click handlers
     $("#buildGraphOk").click(generateGraph);
+    $("#stepButton").click(step);
+}
+
+function step() {
+    if (algorithm === undefined) {
+        // TODO: fix this
+        algorithm = new BfsDfsFinder(graph, start, goal, false);
+    }
+
+    lastAddedToClosedSet = algorithm.step();
+    drawGraph();
 }
 
 function generateGraph() {
@@ -122,6 +134,8 @@ function generateGraph() {
 
 function drawGraph() {
     var panel = document.getElementById("panel");
+    panel.width = panel.width;
+
     var ctx = panel.getContext("2d");
 
     ctx.strokeStyle = INITIAL_COLOR;
@@ -146,6 +160,39 @@ function drawGraph() {
         ctx.fillRect(vertices[i].x * CELL_SIZE - NODE_WIDTH / 2 + CELL_SIZE,
                      vertices[i].y * CELL_SIZE - NODE_WIDTH / 2 + CELL_SIZE,
                      NODE_WIDTH, NODE_HEIGHT);
+    }
+
+    if (algorithm !== undefined) {
+        // Paint edges in open set
+        ctx.strokeStyle = OPEN_COLOR;
+        ctx.lineWidth = 2;
+        var openSet = algorithm.openSet;
+        for (var i = 0; i < openSet.length; i++) {
+            var p = openSet[i];
+            var pred = algorithm.getPredecessor(p);
+            if (pred !== undefined) {
+                ctx.beginPath();
+                ctx.moveTo(pred.x * CELL_SIZE + CELL_SIZE, pred.y * CELL_SIZE + CELL_SIZE);
+                ctx.lineTo(p.x * CELL_SIZE + CELL_SIZE, p.y * CELL_SIZE + CELL_SIZE);
+                ctx.stroke();
+                ctx.closePath();
+            }
+        }
+
+        ctx.strokeStyle = CLOSED_COLOR;
+        ctx.lineWidth = 2;
+        var closedSet = algorithm.closedSet;
+        for (var i = 0; i < openSet.length; i++) {
+            var p = closedSet[i];
+            var pred = algorithm.getPredecessor(p);
+            if (pred !== undefined) {
+                ctx.beginPath();
+                ctx.moveTo(pred.x * CELL_SIZE + CELL_SIZE, pred.y * CELL_SIZE + CELL_SIZE);
+                ctx.lineTo(p.x * CELL_SIZE + CELL_SIZE, p.y * CELL_SIZE + CELL_SIZE);
+                ctx.stroke();
+                ctx.closePath();
+            }
+        }
     }
 
     // Start and Goal nodes

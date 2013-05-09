@@ -2,61 +2,49 @@
 <head>
 	<title>Graph Search Algorithms</title>
 	<link type="text/css" rel="stylesheet" href="http://cdn.brianreber.com/bootstrap-3/css/bootstrap.min.css">
+  <link href="./css/main.css" rel="stylesheet">
 	<script type="text/javascript" src="http://cdn.brianreber.com/js/jquery.min.js"></script>
 	<script type="text/javascript" src="http://cdn.brianreber.com/bootstrap-3/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="./js/seedrandom-min.js"></script>
 	<script type="text/javascript" src="./js/point.js"></script>
 	<script type="text/javascript" src="./js/edge.js"></script>
 	<script type="text/javascript" src="./js/graph.js"></script>
+  <script type="text/javascript" src="./js/bfsdfsfinder.js"></script>
 	<script type="text/javascript" src="./js/graphviewer.js"></script>
-	<style>
-	.center-block {
-		margin-left: auto;
-		margin-right: auto;
-		text-align: center;
-	}
-  #footer {
-  	height: 60px;
-  }
-
-  #footer {
-  	background-color: #f5f5f5;
-  }
-
-  #footer .container p {
-  	margin: 20px 0;
-  }
-	</style>
 </head>
 <body>
-	<div class="navbar">
-	  <a class="navbar-brand" href="#">Graph Search</a>
-	  <ul class="nav navbar-nav">
-	    <li><a>Step</a></li>
-	    <li><a>Run</a></li>
-	    <li><a>Pause</a></li>
-	    <li><a>Reset</a></li>
-	  </ul>
-		<form class="navbar-form pull-left">
-			<select style="width: 150px;">
-			  <option>BFS</option>
-			  <option>DFS</option>
-			  <option>Dijkstra</option>
-			  <option>A*</option>
-			</select>
-      <label>
-        <input type="checkbox" id="bidirectional"> Bidirectional
-      </label>
-		</form>
-	</div>
+  <div id="wrap">
+    <div class="navbar">
+      <a class="navbar-brand" href="javascript:void(0);">Graph Search</a>
+      <ul class="nav navbar-nav">
+        <li><a id="stepButton" href="javascript:void(0);">Step</a></li>
+        <li><a href="javascript:void(0);">Run</a></li>
+        <li><a href="javascript:void(0);">Pause</a></li>
+        <li><a href="javascript:void(0);">Reset</a></li>
+      </ul>
+      <form class="navbar-form form-inline pull-left">
+        <select style="width: 180px;">
+          <option>BFS</option>
+          <option>DFS</option>
+          <option>Dijkstra</option>
+          <option>A*</option>
+        </select>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" id="bidirectional"> Bidirectional
+          </label>
+        </div>
+      </form>
+    </div>
 
-	<div class="center-block">
-		<canvas id="panel"></canvas>
-	</div>
+    <div class="center-block">
+      <canvas id="panel"></canvas>
+    </div>
+  </div>
 
   <div id="footer">
     <div class="container">
-      <p>Copyright (c) 2013</p>
+      <p class="text-muted credit">Copyright (c) 2013</p>
     </div>
   </div>
 </body>
