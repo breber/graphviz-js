@@ -15,9 +15,6 @@ var LAST_ADDED_COLOR = "rgb(0, 255, 255)";
 
 $().ready(function() {
     init();
-
-    // TODO: remove this
-    generateGraph();
 });
 
 // Default graph attributes
@@ -42,20 +39,31 @@ function init() {
     canvas.setAttribute('height', MAX_COORDINATE * CELL_SIZE + CELL_SIZE);
 
     // Generate seed
-    var time = Date.now();
-    sessionStorage["seed"] = time;
+    lastSeed = Date.now();
+
+    // Generate graph
+    generateGraph();
 
     // Set up click handlers
     $("#buildGraphOk").click(generateGraph);
     $("#stepButton").click(step);
     $("#runButton").click(run);
     $("#pauseButton").click(pause);
+    $("#resetButton").click(reset);
 }
 
 function step() {
     if (algorithm === undefined) {
-        // TODO: fix this
-        algorithm = new BfsDfsFinder(graph, start, goal, false);
+        var selected = $("#algorithmSelect").val();
+        if (selected === "BFS") {
+            algorithm = new BfsDfsFinder(graph, start, goal, false);
+        } else if (selected === "DFS") {
+            algorithm = new BfsDfsFinder(graph, start, goal, true);
+        } else if (selected === "Dijkstra") {
+            // TODO:
+        } else if (selected === "A*") {
+            // TODO:
+        }
     }
 
     lastAddedToClosedSet = algorithm.step();
@@ -81,6 +89,21 @@ function pause() {
     $("#stepButton").parent().attr("class", "");
     $("#runButton").parent().attr("class", "");
     $("#pauseButton").parent().attr("class", "active");
+}
+
+function reset() {
+    clearTimeout(runTimeout);
+
+    algorithm = undefined;
+    lastAddedToClosedSet = undefined;
+    vertices = [];
+    graph = new ListGraph();
+
+    generateGraph();
+
+    $("#stepButton").parent().attr("class", "");
+    $("#runButton").parent().attr("class", "");
+    $("#pauseButton").parent().attr("class", "");
 }
 
 function generateGraph() {
