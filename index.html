@@ -14,27 +14,29 @@
 </head>
 <body>
   <div id="wrap">
-    <div class="navbar">
-      <a class="navbar-brand" href="javascript:void(0);">Graph Search</a>
-      <ul class="nav navbar-nav">
-        <li><a id="stepButton" href="javascript:void(0);"><span class="glyphicon glyphicon-step-forward"></span> Step</a></li>
-        <li><a id="runButton" href="javascript:void(0);"><span class="glyphicon glyphicon-play"></span> Run</a></li>
-        <li><a id="pauseButton" href="javascript:void(0);"><span class="glyphicon glyphicon-pause"></span> Pause</a></li>
-        <li><a id="resetButton" href="javascript:void(0);"><span class="glyphicon glyphicon-stop"></span> Reset</a></li>
-      </ul>
-      <form class="navbar-form form-inline pull-left">
-        <select id="algorithmSelect" style="width: 180px;">
-          <option>BFS</option>
-          <option>DFS</option>
-          <option>Dijkstra</option>
-          <option>A*</option>
-        </select>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" id="bidirectional" disabled> Bidirectional
-          </label>
-        </div>
-      </form>
+    <div class="navbar navbar-fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="javascript:void(0);">Graph Search</a>
+        <ul class="nav navbar-nav">
+          <li><a id="stepButton" href="javascript:void(0);"><span class="glyphicon glyphicon-step-forward"></span> Step</a></li>
+          <li><a id="runButton" href="javascript:void(0);"><span class="glyphicon glyphicon-play"></span> Run</a></li>
+          <li><a id="pauseButton" href="javascript:void(0);"><span class="glyphicon glyphicon-pause"></span> Pause</a></li>
+          <li><a id="resetButton" href="javascript:void(0);"><span class="glyphicon glyphicon-stop"></span> Reset</a></li>
+        </ul>
+        <form class="navbar-form form-inline pull-left">
+          <select id="algorithmSelect" style="width: 180px;">
+            <option>BFS</option>
+            <option>DFS</option>
+            <option>Dijkstra</option>
+            <option>A*</option>
+          </select>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" id="bidirectional" disabled> Bidirectional
+            </label>
+          </div>
+        </form>
+      </div>
     </div>
 
     <div class="center-block">
