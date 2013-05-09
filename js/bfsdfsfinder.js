@@ -3,7 +3,7 @@ function BfsDfsFinder(graph, start, goal, isDfs) {
     this.start = start;
     this.goal = goal;
     this.predMap = {};
-    this.openSet = [start];
+    this.openSet = [start]; // A Stack (DFS) or a Queue (BFS)
     this.closedSet = [];
     this.done = false;
 

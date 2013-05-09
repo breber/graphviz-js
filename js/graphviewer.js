@@ -60,9 +60,9 @@ function step() {
         } else if (selected === "DFS") {
             algorithm = new BfsDfsFinder(graph, start, goal, true);
         } else if (selected === "Dijkstra") {
-            // TODO:
+            algorithm = new DijkstraAStarFinder(graph, start, goal, true);
         } else if (selected === "A*") {
-            // TODO:
+            algorithm = new DijkstraAStarFinder(graph, start, goal, false);
         }
     }
 

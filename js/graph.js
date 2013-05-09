@@ -31,6 +31,8 @@ function ListGraph() {
         return this.edgeSets[v];
     };
     this.h = function(cur, goal) {
-        return 0; // TODO
+        // A heuristic based on the Euclidian distance between
+        // the two points
+        return Math.round(Point.distance(cur, goal) * 100);
     };
 }
