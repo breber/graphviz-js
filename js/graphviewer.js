@@ -33,6 +33,7 @@ var vertices = [];
 var graph = new ListGraph();
 var lastAddedToClosedSet;
 var algorithm;
+var runTimeout;
 
 function init() {
     // Set up canvas
@@ -47,6 +48,8 @@ function init() {
     // TODO: set up click handlers
     $("#buildGraphOk").click(generateGraph);
     $("#stepButton").click(step);
+    $("#runButton").click(run);
+    $("#pauseButton").click(pause);
 }
 
 function step() {
@@ -57,6 +60,24 @@ function step() {
 
     lastAddedToClosedSet = algorithm.step();
     drawGraph();
+}
+
+function run() {
+    step();
+    
+    runTimeout = setTimeout(run, 200);
+    
+    $("#stepButton").parent().attr("class", "disabled");
+    $("#runButton").parent().attr("class", "active");
+    $("#pauseButton").parent().attr("class", "");
+}
+
+function pause() {
+    clearTimeout(runTimeout);
+
+    $("#stepButton").parent().attr("class", "");
+    $("#runButton").parent().attr("class", "");
+    $("#pauseButton").parent().attr("class", "active");
 }
 
 function generateGraph() {
@@ -179,16 +200,55 @@ function drawGraph() {
             }
         }
 
+        // Paint edges in closed set
         ctx.strokeStyle = CLOSED_COLOR;
         ctx.lineWidth = 2;
         var closedSet = algorithm.closedSet;
-        for (var i = 0; i < openSet.length; i++) {
+        for (var i = 0; i < closedSet.length; i++) {
             var p = closedSet[i];
             var pred = algorithm.getPredecessor(p);
             if (pred !== undefined) {
                 ctx.beginPath();
                 ctx.moveTo(pred.x * CELL_SIZE + CELL_SIZE, pred.y * CELL_SIZE + CELL_SIZE);
                 ctx.lineTo(p.x * CELL_SIZE + CELL_SIZE, p.y * CELL_SIZE + CELL_SIZE);
+                ctx.stroke();
+                ctx.closePath();
+            }
+        }
+
+        // Paint vertices in open set
+        ctx.fillStyle = OPEN_COLOR;
+        for (var i = 0; i < openSet.length; i++) {
+            var p = openSet[i];
+            ctx.fillRect(p.x * CELL_SIZE - NODE_WIDTH / 2 + CELL_SIZE,
+                         p.y * CELL_SIZE - NODE_WIDTH / 2 + CELL_SIZE,
+                         NODE_WIDTH, NODE_HEIGHT);
+        }
+
+        // Paint vertices in closed set
+        ctx.fillStyle = CLOSED_COLOR;
+        for (var i = 0; i < closedSet.length; i++) {
+            var p = closedSet[i];
+            ctx.fillRect(p.x * CELL_SIZE - NODE_WIDTH / 2 + CELL_SIZE,
+                         p.y * CELL_SIZE - NODE_WIDTH / 2 + CELL_SIZE,
+                         NODE_WIDTH, NODE_HEIGHT);
+        }
+
+        // Shortest path
+        if (algorithm.done && goal !== null) {
+            clearTimeout(runTimeout);
+
+            ctx.strokeStyle = PATH_COLOR;
+            ctx.lineWidth = 3;
+
+            var path = algorithm.getPath(goal);
+            for (var i = 1; i < path.length; i++) {
+                var prev = path[i - 1];
+                var current = path[i];
+
+                ctx.beginPath();
+                ctx.moveTo(prev.x * CELL_SIZE + CELL_SIZE, prev.y * CELL_SIZE + CELL_SIZE);
+                ctx.lineTo(current.x * CELL_SIZE + CELL_SIZE, current.y * CELL_SIZE + CELL_SIZE);
                 ctx.stroke();
                 ctx.closePath();
             }
@@ -220,6 +280,15 @@ function drawGraph() {
         ctx.beginPath();
         ctx.arc(x, y, NODE_WIDTH * 2, 0, 2 * Math.PI);
         ctx.strokeStyle = GOAL_COLOR;
+        ctx.stroke();
+        ctx.closePath();
+    }
+
+    // Last added
+    if (lastAddedToClosedSet !== undefined && lastAddedToClosedSet !== null) {
+        ctx.beginPath();
+        ctx.arc(lastAddedToClosedSet.x * CELL_SIZE + CELL_SIZE, lastAddedToClosedSet.y * CELL_SIZE + CELL_SIZE, NODE_WIDTH * 2, 0, 2 * Math.PI);
+        ctx.strokeStyle = LAST_ADDED_COLOR;
         ctx.stroke();
         ctx.closePath();
     }

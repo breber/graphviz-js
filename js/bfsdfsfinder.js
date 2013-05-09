@@ -56,6 +56,12 @@ function BfsDfsFinder(graph, start, goal, isDfs) {
             }
         }
 
+        // console.log("--- Step ---");
+        // console.log("OpenSet: " + this.openSet.length + " ClosedSet: " + this.closedSet.length);
+        // console.log(this.openSet);
+        // console.log(this.closedSet);
+        // console.log(this.predMap);
+
         return current;
     };
 
