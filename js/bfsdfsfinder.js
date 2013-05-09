@@ -16,7 +16,7 @@ function BfsDfsFinder(graph, start, goal, isDfs) {
         var pred = null;
         
         path.push(current);
-        while ((pred = this.getPredecessor(vertex)) !== undefined) {
+        while ((pred = this.getPredecessor(current)) !== undefined) {
             path.unshift(pred);
             current = pred;
         }

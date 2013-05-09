@@ -45,7 +45,7 @@ function init() {
     var time = Date.now();
     sessionStorage["seed"] = time;
 
-    // TODO: set up click handlers
+    // Set up click handlers
     $("#buildGraphOk").click(generateGraph);
     $("#stepButton").click(step);
     $("#runButton").click(run);
@@ -64,12 +64,15 @@ function step() {
 
 function run() {
     step();
-    
-    runTimeout = setTimeout(run, 200);
-    
-    $("#stepButton").parent().attr("class", "disabled");
-    $("#runButton").parent().attr("class", "active");
-    $("#pauseButton").parent().attr("class", "");
+
+    if (algorithm !== undefined && !algorithm.done) {
+        runTimeout = setTimeout(run, 200);
+        $("#stepButton").parent().attr("class", "disabled");
+        $("#runButton").parent().attr("class", "active");
+        $("#pauseButton").parent().attr("class", "");
+    } else {
+        pause();
+    }
 }
 
 function pause() {
@@ -236,8 +239,6 @@ function drawGraph() {
 
         // Shortest path
         if (algorithm.done && goal !== null) {
-            clearTimeout(runTimeout);
-
             ctx.strokeStyle = PATH_COLOR;
             ctx.lineWidth = 3;
 
